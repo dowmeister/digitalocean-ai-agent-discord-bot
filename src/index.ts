@@ -256,16 +256,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     const message = (interaction as MessageContextMenuCommandInteraction)
       .targetMessage;
+    const user = interaction.user;
 
     console.log(`Contextual command request: ${message.content}`);
 
     try {
       const response = await askDigitalOceanAI(message.content);
+
+      // edit the reply mentioning the original user with the answer
       const responseChunks = splitMessage(response);
-
-      // Send the first chunk as the main reply
-      await interaction.editReply(responseChunks[0]);
-
+      const reply = `<@${user.id}>, ${responseChunks[0]}`;
+      await interaction.editReply(reply);
       // Send any additional chunks as follow-ups
       for (let i = 1; i < responseChunks.length; i++) {
         await interaction.followUp(responseChunks[i]);
