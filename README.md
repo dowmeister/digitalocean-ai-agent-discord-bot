@@ -1,6 +1,6 @@
 # Discord Bot with DigitalOcean AI Agent API Integration
 
-[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/dowmeister/digitalocean-ai-agent-discord-bot/tree/main)
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/dowmeister/digitalocean-ai-agent-discord-bot/tree/main&refcode=02408030ecae)
 
 This Discord bot responds to direct mentions and the `/ask` slash command by connecting to the DigitalOcean AI Agent API and an attached Knowledge Baee.
 
@@ -97,3 +97,5 @@ The bot responds to two types of interactions:
 
 - [Discord.js Documentation](https://discord.js.org/)
 - [DigitalOcean API Documentation](https://docs.digitalocean.com/reference/api/)
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=02408030ecae&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
