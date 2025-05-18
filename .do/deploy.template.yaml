@@ -4,9 +4,7 @@ spec:
     - name: discord-bot
       git:
         branch: main
-        repo_clone_url: ${_self.repository.url}
-      build_command: npm install && npm run build
-      run_command: node dist/index.js
+        repo_clone_url: https://github.com/dowmeister/digitalocean-ai-agent-discord-bot.git
       instance_size_slug: basic-xxs
       instance_count: 1
       source_dir: /
