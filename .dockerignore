@@ -1,0 +1,29 @@
+# Node modules
+node_modules
+
+# Build files
+dist
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Git files
+.git
+.gitignore
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+
+# Other unnecessary files
+README.md
+docker-compose.yml
+Dockerfile
+.dockerignore
