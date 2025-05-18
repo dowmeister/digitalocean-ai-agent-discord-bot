@@ -1,0 +1,44 @@
+{
+  "name": "Discord Bot with DigitalOcean AI Agent",
+  "description": "A Discord bot that uses DigitalOcean AI Agent API to respond to messages and slash commands",
+  "repository": "https://github.com/dowmeister/digitalocean-ai-agent-discord-bot",
+  "logo": "https://github.com/dowmeister/digitalocean-ai-agent-discord-bot/blob/main/assets/logo.png",
+  "keywords": [
+    "discord",
+    "bot",
+    "digitalocean",
+    "ai",
+    "agent",
+    "typescript",
+    "nodejs"
+  ],
+  "env": {
+    "DISCORD_TOKEN": {
+      "description": "Your Discord bot token from the Discord Developer Portal"
+    },
+    "DISCORD_CLIENT_ID": {
+      "description": "Your Discord application client ID from the Discord Developer Portal"
+    },
+    "DO_AI_API_KEY": {
+      "description": "Your DigitalOcean API key with access to AI services"
+    },
+    "DO_AI_AGENT_ENDPOINT": {
+      "description": "The Endpoint URL of your DigitalOcean AI Agent"
+    },
+    "EXPRESS_PORT": {
+      "description": "The port for the Express server to listen on",
+      "value": "3000"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic-xxs"
+    }
+  }
+}

@@ -18,6 +18,17 @@ import {
   MessageContextMenuCommandInteraction,
 } from "discord.js";
 import axios from "axios";
+import express from "express";
+import { Server } from "http";
+
+// Initialize Express for health checks
+const app = express();
+
+// Bot status for health check
+let botStatus = {
+  ready: false,
+  startTime: new Date(),
+};
 
 // Initialize Discord client with necessary intents
 const client = new Client({
@@ -186,6 +197,15 @@ client.once(Events.ClientReady, () => {
   console.log(`Invite me to your server with this link: ${inviteLink}`);
 
   registerCommands();
+
+  botStatus.ready = true;
+  botStatus.startTime = new Date();
+
+  app.listen(process.env.EXPRESS_PORT || 3000, () => {
+    console.log(
+      `Health check server running on port ${process.env.EXPRESS_PORT || 3000}`
+    );
+  });
 });
 
 // Handle slash commands
@@ -304,5 +324,26 @@ client.on(Events.Error, (error: Error) => {
   console.error("Discord client error:", error);
 });
 
+// Setup health check endpoint
+app.get("/health", (req, res) => {
+  // If bot has been ready for at least 10 seconds
+  if (botStatus.ready) {
+    res.status(200).json({
+      status: "ok",
+      uptime: Math.floor(
+        (new Date().getTime() - botStatus.startTime.getTime()) / 1000
+      ),
+    });
+  } else {
+    res.status(503).json({
+      status: "initializing",
+      message: "Bot is starting up",
+    });
+  }
+});
+
 // Login to Discord
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).catch((error) => {
+  console.error("Error logging in to Discord:", error);
+  process.exit(1);
+});

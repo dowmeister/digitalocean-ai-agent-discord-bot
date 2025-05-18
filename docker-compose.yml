@@ -11,6 +11,14 @@ services:
       - ./logs:/usr/src/app/logs
     networks:
       - bot-network
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('node:http').request('http://localhost:3000/health', { timeout: 2000 }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    ports:
+      - "3000:3000"
 
 networks:
   bot-network:

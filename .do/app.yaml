@@ -1,0 +1,45 @@
+spec:
+  name: discord-do-ai-bot
+  services:
+    - name: discord-bot
+      git:
+        branch: main
+        repo_clone_url: ${_self.repository.url}
+      build_command: npm install && npm run build
+      run_command: node dist/index.js
+      instance_size_slug: basic-xxs
+      instance_count: 1
+      source_dir: /
+      http_port: 3000
+      routes:
+        - path: /health
+      health_check:
+        http_path: /health
+        initial_delay_seconds: 10
+        period_seconds: 30
+        timeout_seconds: 5
+        success_threshold: 1
+        failure_threshold: 3
+      envs:
+        - key: DISCORD_TOKEN
+          scope: RUN_TIME
+          value: ${discord_token.value}
+          type: SECRET
+        - key: DISCORD_CLIENT_ID
+          scope: RUN_TIME
+          value: ${discord_client_id.value}
+          type: SECRET
+        - key: DO_AI_API_KEY
+          scope: RUN_TIME
+          value: ${do_ai_api_key.value}
+          type: SECRET
+        - key: DO_AI_AGENT_ENDPOINT
+          scope: RUN_TIME
+          value: ${do_ai_agent_endpoint.value}
+          type: SECRET
+        - key: EXPRESS_PORT
+          scope: RUN_TIME
+          value: "3000"
+        - key: NODE_ENV
+          scope: RUN_TIME
+          value: production

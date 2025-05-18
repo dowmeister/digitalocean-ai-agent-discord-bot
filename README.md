@@ -1,5 +1,7 @@
 # Discord Bot with DigitalOcean AI Agent API Integration
 
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/dowmeister/digitalocean-ai-agent-discord-bot/tree/main)
+
 This Discord bot responds to direct mentions and the `/ask` slash command by connecting to the DigitalOcean AI Agent API and an attached Knowledge Baee.
 
 ## Prerequisites
