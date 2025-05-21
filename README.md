@@ -76,7 +76,7 @@ The bot responds to two types of interactions:
 
 2. **Slash Command**: Use the `/ask` command followed by your question
    ```
-   /ask Can you help me?
+   /ask Can you help me? <@dowmeister>
    ```
 
 ## Features

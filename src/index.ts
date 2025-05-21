@@ -104,12 +104,18 @@ async function registerCommands(): Promise<void> {
   const commands = [
     new SlashCommandBuilder()
       .setName("ask")
-      .setDescription("Ask the DigitalOcean AI Agent a question")
+      .setDescription("Ask the AI Agent a question")
       .addStringOption((option) =>
         option
           .setName("question")
           .setDescription("Your question for the AI")
           .setRequired(true)
+      )
+      .addUserOption((option) =>
+        option
+          .setName("user_to_mention")
+          .setDescription("User to mention in the response")
+          .setRequired(false)
       )
       .toJSON(),
     new ContextMenuCommandBuilder()
@@ -122,10 +128,29 @@ async function registerCommands(): Promise<void> {
 
   try {
     console.log("Started refreshing application (/) commands.");
-    await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID), {
-      body: commands,
-    });
-    console.log("Successfully registered application commands.");
+
+    if (process.env.DEV_GUILD_ID) {
+      // The put method is used to deploy commands to a specific guild
+      const data: any = await rest.put(
+        Routes.applicationGuildCommands(
+          process.env.DISCORD_CLIENT_ID,
+          process.env.DEV_GUILD_ID
+        ),
+        { body: commands }
+      );
+
+      console.log(
+        `Successfully reloaded ${data.length} application (/) commands in the guild.`
+      );
+    } else {
+      await rest.put(
+        Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
+        {
+          body: commands,
+        }
+      );
+      console.log("Successfully registered application commands.");
+    }
   } catch (error) {
     console.error("Error registering slash commands:", error);
   }
@@ -224,14 +249,25 @@ client.on(Events.InteractionCreate, async (interaction) => {
       return;
     }
 
+    const userToMention = (
+      interaction as ChatInputCommandInteraction
+    ).options.getUser("user_to_mention");
+
     console.log(`Slash command request: ${question}`);
 
     try {
       const response = await askDigitalOceanAI(question);
       const responseChunks = splitMessage(response);
 
+      let reply = responseChunks[0];
+
+      if (userToMention) {
+        // If a user is mentioned, prepend the reply with a mention
+        reply = `<@${userToMention.id}>, ${reply}`;
+      }
+
       // Send the first chunk as the main reply
-      await interaction.editReply(responseChunks[0]);
+      await interaction.editReply(reply);
 
       // Send any additional chunks as follow-ups
       for (let i = 1; i < responseChunks.length; i++) {
@@ -256,7 +292,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     const message = (interaction as MessageContextMenuCommandInteraction)
       .targetMessage;
-    const user = interaction.user;
+    const user = message.author;
 
     console.log(`Contextual command request: ${message.content}`);
 
